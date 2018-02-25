@@ -5,17 +5,19 @@ public class Speak {
 
     protected File scriptFile;
     protected Process process;
-    protected final String[] voices;
+    protected String[] voices;
     protected int voiceIndex = 0;
     //protected int pitch = 0; // -10 to +10
     protected int volume = 50; // 0 to 100
     protected int rate = 100; // 80 to 400
+    private String sayThis = "";
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         new Speak().test();
     }
 
-    private void test() {
+    public void test() {
+        voices = populateVoiceArray();
         int numVoices = voices.length;
         if (numVoices == 0) {
             return;
@@ -35,14 +37,33 @@ public class Speak {
         }
     }
 
-    public Speak() {
-        voices = populateVoiceArray();
+    public Speak() {//String sayThis) throws IOException {
+//        voices = populateVoiceArray();
+//        this.sayThis = sayThis;
     }
 
     protected String[] populateVoiceArray() {
         Scanner input = null;
         try {
-            Process p = Runtime.getRuntime().exec("say -v victoria The dream team is going to win");
+            Process p;// = Runtime.getRuntime().exec("say -v victoria i could not translate that");
+            if(sayThis.contains("hypotension")) {
+                p = Runtime.getRuntime().exec("say -v victoria also means low blood pressure");
+            } else if(sayThis.contains("hypertension")) {
+                p = Runtime.getRuntime().exec("say -v victoria also means high blood pressure");
+            } else if(sayThis.contains("appendectomy")){
+                p = Runtime.getRuntime().exec("say -v victoria this is the removal of the appendix");
+            } else if(sayThis.contains("biopsy")){
+                p = Runtime.getRuntime().exec("say -v victoria this is a test used to help diagnose cancer in a particular region");
+            }  else if(sayThis.contains("hysterectomy")){
+                p = Runtime.getRuntime().exec("say -v victoria this is the removal of a woman's uterus");
+            }  else if(sayThis.contains("dream team")){
+                p = Runtime.getRuntime().exec("say -v victoria the dream team deserves to win");
+            }  else if(sayThis.contains("atherosclerosis")){
+                p = Runtime.getRuntime().exec("say -v victoria this is a disease where plaque buildup makes the inside of an artery more narrow");
+            } else {
+                p = Runtime.getRuntime().exec("say -v victoria i could not translate that");
+            }
+
             new ProcessReader(p, true); // consume the error stream
             input = new Scanner(p.getInputStream());
             List<String> voiceList = new ArrayList<String>();
@@ -114,6 +135,10 @@ public class Speak {
             ex.printStackTrace();
         }
         return process;
+    }
+
+    public void setSayThis(String sayThis) {
+        this.sayThis = sayThis;
     }
 }
 

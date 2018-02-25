@@ -24,7 +24,9 @@ public class Gui extends JFrame {
 
     private JLabel enterHere = new JLabel("Please enter the phrase you would like converted.");
 
-    private String phrase;
+    public String phrase;
+
+    public Speak speak = new Speak();
 
     /**
      * This is the text field at the top of the calculator and this is used for the append method.
@@ -56,13 +58,16 @@ public class Gui extends JFrame {
         this.add(picPanel,BorderLayout.CENTER);
         setSize(500,500);
         setVisible(true);
+        this.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     }
 
     class ButtonListener implements ActionListener {
         @Override
         public void actionPerformed(ActionEvent e) {
-            phrase = text.getText();
+            phrase = text.getText().toLowerCase();
             System.out.println("The phrase is " + phrase);
+            speak.setSayThis(phrase);
+            speak.test();
         }
 
     }
